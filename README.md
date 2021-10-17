@@ -1,2 +1,2 @@
-# gamepad_python
+# Gamepad
 Gamepad support for python.
