@@ -1,12 +1,14 @@
 import inputs
+import threading
 
-class gamepad:
+class _gamepad:
     def __init__(self):
         self._lasty = ''
         self._lastx = ''
         self.buttons = []
         self.leftJoystick = [0, 0]
         self.rightJoystick = [0, 0]
+        self.start()
     def tick(self):
         events = inputs.get_gamepad()
         if events:
@@ -187,15 +189,17 @@ class gamepad:
                             self.buttons.remove('select')
                         except:
                             pass
-    def main(self):
-        while 1:
-            self.tick()
+    def start(self):
+        self._started = True
+        def ttcb(self):
+            while self._started:
+                self.tick()
+        threading.Thread(target=lambda:ttcb(self),
+                         daemon=True).start()
+    def stop(self):
+        self._started = False
     def isPressed(self, btn):
-        try:
-            self.buttons[btn]
-            return True
-        except:
-            return False
+        return btn in self.buttons
     def leftJoystickCallback(self, x=None, y=None): pass
     def rightJoystickCallback(self, x=None, y=None): pass
     def leftJoystickPressCallback(self): pass
@@ -217,7 +221,7 @@ class gamepad:
     def eastPressCallback(self): pass
     def eastReleaseCallback(self): pass
     def southPressCallback(self): pass
-    def southPressCallback(self): pass
+    def southReleaseCallback(self): pass
     def southReleaseCallback(self): pass
     def selectPressCallback(self): pass
     def selectReleaseCallback(self): pass
@@ -231,4 +235,4 @@ class gamepad:
     def leftReleaseCallback(self): pass
     def rightPressCallback(self): pass
     def rightReleaseCallback(self): pass
-gamepad = gamepad()
+gamepad = _gamepad()
