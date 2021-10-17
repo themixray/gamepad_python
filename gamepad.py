@@ -217,7 +217,6 @@ class gamepad:
     def eastPressCallback(self): pass
     def eastReleaseCallback(self): pass
     def southPressCallback(self): pass
-    def southReleaseCallback(self): pass
     def southPressCallback(self): pass
     def southReleaseCallback(self): pass
     def selectPressCallback(self): pass
