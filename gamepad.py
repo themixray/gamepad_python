@@ -1,16 +1,23 @@
 import inputs
 import threading
+import time
 
 class _gamepad:
     def __init__(self):
         self._lasty = ''
         self._lastx = ''
+        self.founded = False
         self.buttons = []
         self.leftJoystick = [0, 0]
         self.rightJoystick = [0, 0]
         self.start()
     def tick(self):
+        def exc(self):
+            if self.founded == False:
+                raise Exception('Gamepad not found!')
+        threading.Timer(10, lambda: exc(self)).start()
         events = inputs.get_gamepad()
+        self.founded = True
         if events:
             for event in events:
                 if event.code == 'ABS_X':
@@ -172,24 +179,25 @@ class _gamepad:
                 elif event.code == 'BTN_START':
                     if event.state:
                         self.selectPressCallback()
-                        self.buttons.append('start')
+                        self.buttons.append('select')
                     else:
                         self.selectReleaseCallback()
                         try:
-                            self.buttons.remove('start')
+                            self.buttons.remove('select')
                         except:
                             pass
                 elif event.code == 'BTN_SELECT':
                     if event.state:
                         self.startPressCallback()
-                        self.buttons.append('select')
+                        self.buttons.append('start')
                     else:
                         self.startReleaseCallback()
                         try:
-                            self.buttons.remove('select')
+                            self.buttons.remove('start')
                         except:
                             pass
     def start(self):
+        self.founded = False
         self._started = True
         def ttcb(self):
             while self._started:
@@ -200,6 +208,12 @@ class _gamepad:
         self._started = False
     def isPressed(self, btn):
         return btn in self.buttons
+    def reset(self):
+        self._lasty = ''
+        self._lastx = ''
+        self.buttons = []
+        self.leftJoystick = [0, 0]
+        self.rightJoystick = [0, 0]
     def leftJoystickCallback(self, x=None, y=None): pass
     def rightJoystickCallback(self, x=None, y=None): pass
     def leftJoystickPressCallback(self): pass
