@@ -12,12 +12,13 @@ class _gamepad:
         self.rightJoystick = [0, 0]
         self.start()
     def tick(self):
-        def exc(self):
-            if self.founded == False:
-                raise Exception('Gamepad not found!')
-        threading.Timer(10, lambda: exc(self)).start()
         events = inputs.get_gamepad()
         self.founded = True
+        temp = []
+        for x in self.buttons:
+            if x not in temp:
+                temp.append(x)
+        self.buttons = temp
         if events:
             for event in events:
                 if event.code == 'ABS_X':
@@ -197,6 +198,10 @@ class _gamepad:
                         except:
                             pass
     def start(self):
+        def exc(self):
+            if self.founded == False:
+                raise Exception('Gamepad not found!')
+        threading.Timer(10, lambda: exc(self)).start()
         self.founded = False
         self._started = True
         def ttcb(self):
